@@ -53,12 +53,13 @@ class HashTable:
         '''
         index = self._hash_mod(key)
         if self.storage[index] is None:
-            new_list = LinkedList({key: value})
+            new_list = LinkedList()
+            new_list.add_to_head({key: value})
             self.storage[index] = new_list 
         else:
             current_list = self.storage[index]
             current_list.add_to_head({key: value})            
-        print(f"insertion: {self.storage}")
+        # print(f"insertion: {self.storage}")
 
 
 
@@ -71,11 +72,12 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        if self.storage[index] != None:
-            self.storage[index] = None
+        if self.storage[index]:
+            print("OK")
+            self.storage[index].remove(key)
         else:
             print("this key empty, yeet")
-        print(f"removal: {self.storage}")
+        # print(f"removal: {self.storage}")
 
 
     def retrieve(self, key):
@@ -91,7 +93,7 @@ class HashTable:
         if self.storage[index] is None:
             return None
         else:
-            return self.storage[index]
+            return self.storage[index].contains(key)
         
 
 
@@ -130,6 +132,10 @@ class LinkedList:
         '''
         Find and remove the node with the given value
         '''
+        print("OK")
+        print("remove", value)
+        print("remove", self.head)
+        print("remove", self.head.value)
         # If we have no head
         if not self.head:
             # print an error and return
@@ -159,7 +165,15 @@ class LinkedList:
         Return true if our LL contains the value
         '''
 		# Fill this in
-        #        
+        current = self.head
+        # print("curr", current.value[value])
+        # print("val", value)
+        
+        # while current:
+        #     if current.value is value:
+        #     	return value
+        #     current = current.next   
+        return False  
 
 if __name__ == "__main__":
     ht = HashTable(3)
@@ -188,6 +202,8 @@ if __name__ == "__main__":
     print(ht.retrieve("line_1"))
     print(ht.retrieve("line_2"))
     print(ht.retrieve("line_3"))
+
+    print(ht.remove("line_2"))
 
     ht.resize()
 
