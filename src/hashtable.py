@@ -72,11 +72,12 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        if self.storage[index]:
+        if self.storage[index] != None and self.storage[index].head != None:
             print("OK")
             self.storage[index].remove(key)
         else:
             print("this key empty, yeet")
+            return None
         # print(f"removal: {self.storage}")
 
 
@@ -89,8 +90,8 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        print(f"retreival: {index} is {self.storage}")
-        if self.storage[index] is None:
+        # print(f"retreival: {index} is {self.storage}")
+        if self.storage[index] is None or self.storage[index].head is None:
             return None
         else:
             return self.storage[index].contains(key)
@@ -106,11 +107,23 @@ class HashTable:
         '''
         array = []
         for i in range(0, self.capacity):
-            array.append(self.storage[i])
+            print("curr index", self.storage[i])
+            while self.storage[i] != None and self.storage[i].head != None:
+                head = self.storage[i].pop_head()
+                print("head", head.value)
+                array.append(head.value)
+        # print("arr", array)
         self.capacity *= 2
         self.storage = [None] * self.capacity  
-        for i in range(0, len(array) - 1):
-            self.storage[i] = array[i]
+        for i in range(0, len(array)):
+            # key = array[i].keys()
+            # print("arr", key)
+            # self.insert array[i]
+            for key in array[i]:
+                # print("ok", key)
+                # print("ok", array[i].get(key))
+                value = array[i].get(key)
+                self.insert(key, value)
         print("resize", self.storage)
 
 class Node:
@@ -128,20 +141,25 @@ class LinkedList:
         # Set current head to new node
         self.head = new_node
 
+    def pop_head(self):
+        head = self.head
+        self.head = self.head.next
+        return head
+
     def remove(self, value):
         '''
         Find and remove the node with the given value
         '''
-        print("OK")
-        print("remove", value)
-        print("remove", self.head)
-        print("remove", self.head.value)
+        # print("OK")
+        # print("remove", value)
+        # print("remove", self.head)
+        # print("remove", self.head.value.get(value))
         # If we have no head
         if not self.head:
             # print an error and return
             print("Error: Value not found")
         # If the head has our value
-        elif self.head.value == value:
+        elif self.head.value.get(value):
             # Remove the head by pointing self.head to head.next
             self.head = self.head.next
         # Else
@@ -152,7 +170,7 @@ class LinkedList:
             # Walk through the linked list until we find a matching value
             while current:
                 # If we find a matching value
-                if current.value == value:
+                if self.head.value.get(value):
                     # Delete the node by pointing parent.next to node.next
                     parent.next = current.next
                     return
@@ -166,19 +184,18 @@ class LinkedList:
         '''
 		# Fill this in
         current = self.head
-        # print("curr", current.value[value])
+        # print("curr", current.value.get(value))
         # print("val", value)
         
-        # while current:
-        #     if current.value is value:
-        #     	return value
-        #     current = current.next   
+        while current:
+            if current.value.get(value):
+            	return current.value.get(value)
+            current = current.next   
         return False  
 
 if __name__ == "__main__":
     ht = HashTable(3)
-
-    
+ 
 
     ht.insert("line_1", "Tiny hash table")
     ht.insert("line_2", "Filled beyond capacity")
@@ -203,8 +220,8 @@ if __name__ == "__main__":
     print(ht.retrieve("line_2"))
     print(ht.retrieve("line_3"))
 
-    print(ht.remove("line_2"))
+    print(ht.remove("line_3"))
 
-    ht.resize()
+    # ht.resize()
 
     print("")
